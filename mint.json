@@ -5,56 +5,58 @@
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/logo.png",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#ef4444",
+    "light": "#ffffff",
+    "dark": "#0D0D0D",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#ef4444",
+      "to": "#cd6363"
     }
   },
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:launchleopard@thomasmol.com"
     }
   ],
   "topbarCtaButton": {
-    "name": "Repo",
+    "name": "Repository",
     "url": "https://github.com/thomasmol/launchleopard"
   },
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
+      "name": "Repository",
+      "icon": "github",
+      "url": "https://github.com/thomasmolorg/launchleopard"
     }
   ],
   "navigation": [
     {
       "group": "Get Started",
       "pages": [
-        "introduction",
-        "quickstart",
-        "development"
+        "getstarted/introduction",
+        "getstarted/quickstart",
+        "getstarted/development",
+        "getstarted/deployment"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Features",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation"
+        "features/framework",
+        "features/authentication",
+        "features/database",
+        "features/payments",
+        "features/styling",
+        "features/email",
+        "features/components"
       ]
     }
   ],
   "footerSocials": {
     "twitter": "https://twitter.com/thomas_mol",
-    "github": "https://github.com/thomasmol"
-
+    "github": "https://github.com/thomasmolorg/launchleopard"
   }
 }
