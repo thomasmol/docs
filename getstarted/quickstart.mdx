@@ -6,26 +6,35 @@ description: "Start building your SaaS in under 5 minutes"
 Follow these steps to get started with the boilerplate.
 
 <Steps>
-    <Step title="Boilerplate repo access">
-        Make sure you have access to the boilerplate repo 
-    </Step>
     <Step title="Clone or 'Use this template'">
-    To get started clone the repo or click on the "Use this template" button.
+    To get started visit the [GitHub repo](https://github.com/thomasmolorg/launchleopard) and 
+    click on `Use this template` to create a new repository with the Launch Leopard boilerplate.
+    </Step>
+    <Step title="Clone your new repository">
+        Clone your new repository with the following command
+        ```bash
+        git clone https://github.com/[your_username]/[your_repo_name].git
+        ```
 
-    ```bash
-    git clone https://github.com/thomasmolorg/launchleopard.git [APP_NAME]
-    cd [APP_NAME]
-    npm install
-    ```
-
+        Or use VSCode to clone your repository
     </Step>
     <Step title="Set .env">
-        Rename the `.env.example file` to `.env` and set the environment variables
+        Rename the `.env.example` file to `.env`
     </Step>
-    <Step title="Start the app">
+    <Step title="Install dependencies">
+        Install dependencies with the following command
+        ```bash
+        npm install
+        ```
+    </Step>
+    <Step title="Start a local server">
         Start the app locally with the following command
-        ```bash 
+        ```bash
         npm run dev
         ```
+        Your app should now be running on [http://localhost:5173](http://localhost:5173), or check your terminal for the port number.
+    </Step>
+    <Step title="Setup email and database">
+        Now you should setup the database and email to get the authentication working.
     </Step>
 </Steps>
