@@ -17,19 +17,28 @@
   },
   "topbarLinks": [
     {
+      "name": "Get LL",
+      "url": "https://launchleopard.com/checkout"
+    },
+    {
       "name": "Support",
       "url": "mailto:launchleopard@thomasmol.com"
     }
   ],
   "topbarCtaButton": {
-    "name": "Repository",
+    "name": "Repo",
     "url": "https://github.com/thomasmol/launchleopard"
   },
   "anchors": [
     {
-      "name": "Repository",
+      "name": "Visit Repo",
       "icon": "github",
       "url": "https://github.com/thomasmolorg/launchleopard"
+    },
+    {
+      "name": "Get Launch Leopard",
+      "icon": "rocket-launch",
+      "url": "https://launchleopard.com/checkout"
     }
   ],
   "navigation": [
@@ -38,7 +47,6 @@
       "pages": [
         "getstarted/introduction",
         "getstarted/quickstart",
-        "getstarted/development",
         "getstarted/deployment"
       ]
     },
