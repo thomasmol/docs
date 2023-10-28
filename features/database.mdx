@@ -12,9 +12,9 @@ Check their [docs](https://orm.drizzle.team/docs/overview) for more details on h
 By default, Drizzle is setup with a Postgres database.
 The database schema is found in `src/lib/server/database/schema.ts`.
 
-Also see the `drizzle.config.ts` for database configuration.
+Also see the `drizzle.config.ts` for the drizzle configuration.
 
-## Setup a Postgres database
+## Setting up a database
 
 <Steps>
     <Step title="Create new Postgres db">
@@ -38,26 +38,27 @@ Also see the `drizzle.config.ts` for database configuration.
     </Step>
 
     <Step title="Generate migration files">
-         run `npm run db:generate` to generate the migration sql files.
         Generate the migration files with
         ```bash
         npm run db:generate
         ```
+        Migration files are located in `drizzle/`
     </Step>
     <Step title="Run migration">
-
         Then migrate them to create the tables in your database:
          ```bash
         npm run db:migrate
         ```
 
-        Migration files are located in `drizzle/`
+        The migration script is also run when building your app in production with `npm run build`.
     </Step>
 
 </Steps>
 
-Then run `npm run db:migrate` to apply the changes to your database.
-
-The migration script is also run when the server is build with the `npm run build` command.
 
 ## Using other database providers
+
+Drizzle can also be setup with a MySQL or SQLite database.
+
+Make the changes in `drizzle.config.ts`, `src/lib/server/database/drizzle.ts`, `src/lib/server/database/schema.ts` and `src/lib/server/database/migrate.ts` files.
+Check the [Drizzle docs](https://orm.drizzle.team/docs/overview) for more details.

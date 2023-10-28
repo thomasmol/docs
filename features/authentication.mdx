@@ -17,6 +17,11 @@ Check the [Auth.js documentation for SvelteKit](https://authjs.dev/reference/sve
 
 By default Launch Leopard uses the email provider for authentication. Here is how to set it up:
 
+Run `npm run db:generate` and `npm run db:migrate` to create the database migration files and run the migration. 
+By default the database schema has all the tables needed for Auth.js.
+
+Then setup a Loops transactional email to send login links to users:
+
 <Steps>
     <Step title="Setup Loops">
         Make sure you have setup Loops (transcactional + marketing email platform), check the docs [here](/features/email).
