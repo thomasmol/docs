@@ -1,5 +1,63 @@
 ---
-title: 'Database'
-description: 'Drizzle ORM'
-icon: 'database'
+title: "Database"
+description: "With Drizzle ORM"
+icon: "database"
 ---
+
+Launch Leopard comes with DrizzleORM, a lightweight and blazing fast Typescript ORM.
+It supports Postgres, MySQL and SQLite databases.
+
+Check their [docs](https://orm.drizzle.team/docs/overview) for more details on how to use it.
+
+By default, Drizzle is setup with a Postgres database.
+The database schema is found in `src/lib/server/database/schema.ts`.
+
+Also see the `drizzle.config.ts` for database configuration.
+
+## Setup a Postgres database
+
+<Steps>
+    <Step title="Create new Postgres db">
+        Create a new Postgres database locally or on a db host like [Railway](https://railway.app/) or [Vercel](https://vercel.com).
+        
+        Local Postgres database [docs](https://www.postgresql.org)
+    </Step>
+
+    <Step title="Update .env file">
+        Update the `.env` file with your Postgres database connection string:
+       `PRIVATE_DATABASE_URL=[YOUR POSTGRES CONNECTION STRING]`
+    </Step>
+</Steps>
+
+## Updating the database schema
+
+<Steps>
+    <Step title="Make changes to your schema">
+      Just make changes to your schema in `src/lib/server/database/schema.ts`.
+
+    </Step>
+
+    <Step title="Generate migration files">
+         run `npm run db:generate` to generate the migration sql files.
+        Generate the migration files with
+        ```bash
+        npm run db:generate
+        ```
+    </Step>
+    <Step title="Run migration">
+
+        Then migrate them to create the tables in your database:
+         ```bash
+        npm run db:migrate
+        ```
+
+        Migration files are located in `drizzle/`
+    </Step>
+
+</Steps>
+
+Then run `npm run db:migrate` to apply the changes to your database.
+
+The migration script is also run when the server is build with the `npm run build` command.
+
+## Using other database providers

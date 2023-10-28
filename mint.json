@@ -56,12 +56,12 @@
       ]
     },
     {
-      "group": "Features",
+      "group": "Features + Tutorial",
       "pages": [
         "features/framework",
+        "features/database",
         "features/email",
         "features/authentication",
-        "features/database",
         "features/payments",
         "features/styling",
         "features/components"

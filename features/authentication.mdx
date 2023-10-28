@@ -22,7 +22,7 @@ By default Launch Leopard uses the email provider for authentication. Here is ho
         Make sure you have setup Loops (transcactional + marketing email platform), check the docs [here](/features/email).
     </Step>
     <Step title="Create new Transactional email">
-        Create a new transcactional email in Loops [here](https://app.loops.ai/transactional).
+        Create a new transcactional email in Loops [here](https://app.loops.so/transactional).
     </Step>
     <Step title="Add datavariable ">
     Add a datavariable called `verificationUrl` in the email template. That's where the verification url will be added.
@@ -36,7 +36,7 @@ By default Launch Leopard uses the email provider for authentication. Here is ho
     <Step title="Set the transactional id">
       You should now see a TRANSACTIONAL ID.
       <img height="200" width="auto" src="/images/loopstransid.png" />
-      Copy it and set it in `hooks.server.ts` in the `EmailProvder` provider in the body of the `fetch` request.
+      Copy the TRANSACTIONAL ID and set it in `hooks.server.ts` in the `EmailProvder` provider in the body of the `fetch` request.
 ```ts hooks.server.ts
 export const handle = sequence(
 	SvelteKitAuth({
