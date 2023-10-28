@@ -1,5 +1,52 @@
 ---
 title: 'Email'
-description: 'Loops'
+description: 'Transactional + Marketing email with Loops.so'
 icon: 'at'
 ---
+
+[Loops.so](https://loops.so) is a email platform for sending transactional and marketing emails. Find their docs [here](https://loops.so/docs).
+
+## Setup
+<Steps>
+    <Step title="Create Loops account">
+        Go to [Loops](https://app.loops.so/register) and create an account.
+    </Step>
+   <Step title="Setup domain records">
+        Follow their [quickstart](https://loops.so/docs/start-here) guide to setup your domain records.
+   </Step>
+   <Step title="Generate API Key">
+        Got to the [API settings](https://app.loops.so/settings?page=api) page and generate a new API Key.
+        
+   </Step>
+    <Step title="Set .env var">
+        Set your API key in your `.env` file as `PRIVATE_LOOPS_API_KEY`.
+    </Step>
+</Steps>
+
+## Adding users to audience
+
+New users are automatically added to your Loops audience when they sign up.
+This is done in `hooks.server.ts`, when the `createUser` event is triggered like so:
+```ts
+export const handle = sequence(
+	SvelteKitAuth({
+		// ...
+		events: {
+			createUser: async (message) => {
+				await fetch('https://app.loops.so/api/v1/contacts/create', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: 'Bearer ' + PRIVATE_LOOPS_API_KEY
+					},
+					body: JSON.stringify({
+						email: message.user.email
+					})
+				});
+			}
+		},
+		// ..
+	}),
+	authorization
+) satisfies Handle;
+```

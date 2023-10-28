@@ -15,6 +15,11 @@
       "to": "#cd6363"
     }
   },
+  "analytics": {
+    "plausible": {
+      "domain": "docs.launchleopard.com"
+    }
+  },
   "topbarLinks": [
     {
       "name": "Get LL",
@@ -54,11 +59,11 @@
       "group": "Features",
       "pages": [
         "features/framework",
+        "features/email",
         "features/authentication",
         "features/database",
         "features/payments",
         "features/styling",
-        "features/email",
         "features/components"
       ]
     }
