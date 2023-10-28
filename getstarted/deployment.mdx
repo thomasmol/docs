@@ -8,8 +8,6 @@ Just make sure to set the correct adapter in `svelte.config.js`.
 
 Follow this guide on Svelte adapters to learn more: https://kit.svelte.dev/docs/adapters
 
-Also make sure to set the environment variables in your deployment environment.
-
 I host my apps on [Railway](https://railway.app) with the Node adapter, very simple to setup and you can also host your SQL database there.
 
 Other options include:
@@ -18,3 +16,20 @@ Other options include:
 - [Render](https://render.com)
 - [Heroku](https://heroku.com)
 - [DigitalOcean](https://digitalocean.com)
+
+## Environment variables
+
+You need to set the following environment variables in your deployment environment:
+
+```
+AUTH_SECRET=1234567890
+AUTH_TRUST_HOST=true
+PRIVATE_DATABASE_URL=your-database-connection-url
+ORIGIN=https://yourdomain.com
+PRIVATE_LOOPS_API_KEY=key
+PRIVATE_STRIPE_SECRET_KEY=sk_test_1
+PRIVATE_STRIPE_WEBHOOK_SECRET=whsec_1
+PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_1
+```
+
+Generate a `AUTH_SECRET` at https://generate-secret.now.sh/32
