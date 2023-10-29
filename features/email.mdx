@@ -25,7 +25,7 @@ icon: 'at'
 
 New users are automatically added to your Loops audience when they sign up.
 This is done in `hooks.server.ts`, when the `createUser` event is triggered like so:
-```ts
+```ts hooks.server.ts
 export const handle = sequence(
 	SvelteKitAuth({
 		// ...

@@ -1,11 +1,86 @@
 ---
-title: 'Payments'
-description: 'With Stripe'
-icon: 'credit-card'
+title: "Payments"
+description: "With Stripe"
+icon: "credit-card"
 ---
 
+Stripe is used to handle payments, invoicing, customer portals, subscriptions and more.
+The standard database schema comes with a `stripeCustomerId` field on the `User` model, so you can easily relate payments and subscriptions to users.
+
+<Note>
+    Please, read how Stripe works at <a target="_blank" href="https://stripe.com/docs">stripe.com/docs</a>, to learn about `webhooks`, `checkout_session`, "test mode" and more.
+</Note>
+
+## Setting up Stripe
+
 <Steps>
-    <Step title="Create a Stripe account">At stripe.com</Step>
-    <Step title="Do the boring stuff"> like enabling payments and making sure receipts are sent </Step>
-    <Step title="Copy keys to .env"> use 'test mode' to get the test keys. don't forget change keys in prod</Step>
+  <Step title="Create a Stripe account">
+    At [Stripe](https://dashboard.stripe.com/register){" "}
+  </Step>
+  <Step title="Activate payments">
+    You'll need to activate payments on your account. You'll need to be
+    registered as a business (anywhere on earth), and you'll need to provide
+    some details about your business.
+  </Step>
+  <Step title="Branding, Emails, Customer Portal">
+    * In `Settings > Branding` you can set your logo and colors
+    * In `Settings > Customer Emails` turn on emails for successful payments and refunds.
+    * In `Settings > Customer Portal` turn on the customer portal, (users can manage their subscriptions and payment methods and view invoices here)
+  </Step>
+  <Step title="Add webhooks endpoint">
+    In `Developers > Webhooks` add a webhook with the url `https://[YOUR DOMAIN]/api/webhooks/stripe` and select the events you want to receive (see below).
+    * **Testing**: enable `test mode` and use the Stripe CLI to enable webhooks on your local machine. Follow their [guide here](https://dashboard.stripe.com/webhooks/create?endpoint_location=local) for more info.
+  </Step>
+  <Step title="Copy keys to .env">
+    In `Developers > API Keys` copy the keys to your `.env` file. The webhook secret is found in the `Webhooks` section.
+    Make sure you use the `test` keys when in `test mode` and the `live` keys when in production.
+    ```env .env
+    PRIVATE_STRIPE_SECRET_KEY=sk_test_1
+    PRIVATE_STRIPE_WEBHOOK_SECRET=whsec_1
+    PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_1
+    ```
+  </Step>
 </Steps>
+
+## Webhooks
+
+Webhooks are used to receive events from Stripe, like when a payment is made or a subscription is cancelled.
+Some commonly used events are added in the `src/routes/api/webhooks/stripe/+server.ts` file.
+Also, the user is automatically updated with the `stripeCustomerId` when a customer is created.
+
+```ts src/routes/api/webhooks/stripe/+server.ts
+switch (event.type) {
+    case 'checkout.session.completed': { // handle new payment (one-time or subscription)
+        const checkoutSession = event.data.object;
+        console.log(checkoutSession);
+        break;
+    }
+    case 'checkout.session.expired': { // handle expired payment
+        const checkoutSession = event.data.object;
+        console.log(checkoutSession);
+        break;
+    }
+    case 'customer.created': { // handle new customer
+        const customer = event.data.object;
+        await db
+            .update(users)
+            .set({ stripeCustomerId: customer.id })
+            .where(eq(users.email, customer.email ?? ''));
+        break;
+    }
+    case 'customer.source.expiring': { // handle expiring card, notify user
+        const customerCardOrSource = event.data.object;
+        console.log(customerCardOrSource);
+        break;
+    }
+    case 'customer.subscription.deleted': { // handle cancelled subscription, revoke access, send winback email
+        const subscription = event.data.object;
+        console.log(subscription);
+        break;
+    }
+    case 'customer.subscription.updated': { // handle subscription changes, revoke access, notify user
+        const subscription = event.data.object;
+        console.log(subscription);
+        break;
+    }
+```
