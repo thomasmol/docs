@@ -6,7 +6,8 @@
     "light": "/logo/light.svg"
   },
   "metadata": {
-    "og:image": "/images/og_image.png"
+    "og:image": "/images/og_image.png",
+    "twitter:image": "/images/og_image.png"
   },
   "favicon": "/logo/favicon.png",
   "colors": {
