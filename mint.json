@@ -5,6 +5,9 @@
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
+  "metadata": {
+    "og:image": "/images/og_image.png"
+  },
   "favicon": "/logo/favicon.png",
   "colors": {
     "primary": "#ef4444",
@@ -22,23 +25,24 @@
   },
   "topbarLinks": [
     {
-      "name": "Get LL",
-      "url": "https://launchleopard.com/checkout"
-    },
-    {
       "name": "Support",
       "url": "mailto:launchleopard@thomasmol.com"
     }
   ],
   "topbarCtaButton": {
-    "name": "Repo",
-    "url": "https://github.com/thomasmol/launchleopard"
+    "name": "Get LaunchLeopard",
+    "url": "https://launchleopard.com/checkout"
   },
   "anchors": [
     {
-      "name": "Visit Repo",
+      "name": "Auth.js Repo",
       "icon": "github",
       "url": "https://github.com/thomasmolorg/launchleopard"
+    },
+    {
+      "name": "Supabase Repo",
+      "icon": "github",
+      "url": "https://github.com/thomasmolorg/launchleopard-supabase"
     },
     {
       "name": "Get Launch Leopard",
@@ -52,11 +56,16 @@
       "pages": [
         "getstarted/introduction",
         "getstarted/quickstart",
-        "getstarted/deployment"
+        "getstarted/deployment",
+        "getstarted/projectstructure"
       ]
     },
     {
-      "group": "Features + Tutorial",
+      "group": "Tutorial",
+      "pages": ["tutorials/authjs", "tutorials/supabase"]
+    },
+    {
+      "group": "Features",
       "pages": [
         "features/framework",
         "features/database",
@@ -64,7 +73,11 @@
         "features/authentication",
         "features/payments",
         "features/styling",
-        "features/components"
+        "features/components",
+        "features/seo",
+        "features/blog",
+        "features/analytics",
+        "features/support"
       ]
     }
   ],
