@@ -16,7 +16,7 @@ Check the [Auth.js documentation for SvelteKit](https://authjs.dev/reference/sve
 
 ## Setting up the Auth.js boilerplate
 
-By default Launch Leopard uses the email provider (with magic login links) for authentication. 
+By default Launch Leopard uses the email provider (with magic login links) for authentication.
 
 Here is how to set it up:
 
@@ -33,48 +33,49 @@ Here is how to set it up:
     </Step>
     <Step title="Run migrations">
         The database schema has all the tables needed for Auth.js, located in `src/lib/server/database/schema.ts`
-        
+
         In your terminal, run
         ```bash
-        npm run db:generate 
+        npm run db:generate
         npm run db:migrate
         ```
         to create the database migration files and run the migration with Drizzle Kit
     </Step>
     <Step title="Setup Loops">
-        Make sure you have setup Loops (transcactional + marketing email platform), check the docs [here](/features/email).
+        Make sure you have setup Loops (transcactional + marketing email platform), check the guide [here](/features/email).
+
+        <Note>You can also setup other methods to send emails, like using [Nodemailer](https://nodemailer.com) or [Resend](https://resend.dev) (these email services are transactional email only). You'll have to change the `sendVerificationRequest` function in `hooks.server.ts` for this.</Note>
     </Step>
     <Step title="Create new Transactional email">
         Create a new transcactional email in Loops [here](https://app.loops.so/transactional).
-    </Step>
-    <Step title="Add datavariable ">
+
     Add a datavariable called `verificationUrl` in the email template. That's where the verification url will be added.
     <img height="200" width="auto" src="/images/loopstransactional.png" />
 
-    You can customize and style the email template however you like.
-    </Step>
-    <Step title="Publish">
+      You can customize and style the email template however you like.
+
       Hit "Next" and publish the email template.
     </Step>
     <Step title="Set the transactional id">
       You should now see a TRANSACTIONAL ID.
       <img height="200" width="auto" src="/images/loopstransid.png" />
       Copy the TRANSACTIONAL ID and set it in `hooks.server.ts` in the `EmailProvder` provider in the body of the `fetch` request.
-```ts hooks.server.ts
+
+```ts hooks.server.ts (Auth.js boilerplate)
 export const handle = sequence(
-	SvelteKitAuth({
-		// ...
-		providers: [
-			EmailProvider({
-				sendVerificationRequest: async ({ identifier: email, url }) => {
-					await loops.sendTransactionalEmail('[YOUR TRANSACTIONAL ID]', email, {
-						verificationUrl: url
-					});
-				}
-			})
-		]
-	}),
-	// ...
+  SvelteKitAuth({
+    // ...
+    providers: [
+      EmailProvider({
+        sendVerificationRequest: async ({ identifier: email, url }) => {
+          await loops.sendTransactionalEmail("[YOUR TRANSACTIONAL ID]", email, {
+            verificationUrl: url,
+          });
+        },
+      }),
+    ],
+  })
+  // ...
 ) satisfies Handle;
 ```
 

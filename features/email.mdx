@@ -4,6 +4,7 @@ description: 'Transactional + Marketing email with Loops.so'
 icon: 'at'
 ---
 [Loops.so](https://loops.so) is a email platform for sending transactional and marketing emails. Find their docs [here](https://loops.so/docs).
+
 ## Setting up Email with Loops
 <Steps>
     <Step title="Create Loops account">
@@ -20,11 +21,15 @@ icon: 'at'
     </Step>
 </Steps>
 
+See the [JavaScript SDK docs](https://loops.so/docs/sdks/javascript#sendtransactionalemail) of Loops for more information on how to use it.
+
 ## Adding users to audience
 
+<Tabs>
+  <Tab title="Auth.js">
 New users are automatically added to your Loops audience when they sign up.
 This is done in `hooks.server.ts`, when the `createUser` event is triggered like so:
-```ts hooks.server.ts
+```ts hooks.server.ts (Auth.js boilerplate)
 export const handle = sequence(
 	SvelteKitAuth({
 		// ...
@@ -33,8 +38,20 @@ export const handle = sequence(
 				await loops.createContact(message.user.email ?? '', { userId: message.user.id });
 			}
 		},
-		// ..
+		// ...
 	}),
-	authorization
+	// ...
 ) satisfies Handle;
 ```
+  </Tab>
+  <Tab title="Supabase">
+    Loops is currently working on an integration with Supabase, so watch out for that!
+
+	For now, you can setup up Database Webhooks with Supabase to add users to your Loops audience.
+
+	* Official Supabase Webhooks [guide](https://supabase.com/docs/guides/database/webhooks)
+	* Or follow [this](https://github.com/triggerdotdev/supabase-to-loops) Trigger.dev guide
+	* Or implement your own way of adding users to your Loops audience, like using the AuthStateChanged event
+  </Tab>
+
+</Tabs>
