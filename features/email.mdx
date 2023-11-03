@@ -14,7 +14,6 @@ icon: 'at'
    </Step>
    <Step title="Generate API Key">
         Got to the [API settings](https://app.loops.so/settings?page=api) page and generate a new API Key.
-        
    </Step>
     <Step title="Set .env var">
         Set your API key in your `.env` file as `PRIVATE_LOOPS_API_KEY`.
@@ -31,16 +30,7 @@ export const handle = sequence(
 		// ...
 		events: {
 			createUser: async (message) => {
-				await fetch('https://app.loops.so/api/v1/contacts/create', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: 'Bearer ' + PRIVATE_LOOPS_API_KEY
-					},
-					body: JSON.stringify({
-						email: message.user.email
-					})
-				});
+				await loops.createContact(message.user.email ?? '', { userId: message.user.id });
 			}
 		},
 		// ..
