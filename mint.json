@@ -38,7 +38,7 @@
     {
       "name": "Auth.js Repo",
       "icon": "github",
-      "url": "https://github.com/thomasmolorg/launchleopard"
+      "url": "https://github.com/thomasmolorg/launchleopard-authjs"
     },
     {
       "name": "Supabase Repo",
@@ -84,6 +84,7 @@
   ],
   "footerSocials": {
     "twitter": "https://twitter.com/thomas_mol",
-    "github": "https://github.com/thomasmolorg/launchleopard"
+    "github authjs": "https://github.com/thomasmolorg/launchleopard-authjs",
+    "github supabase": "https://github.com/thomasmolorg/launchleopard-supabase"
   }
 }
