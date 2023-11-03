@@ -1,9 +1,9 @@
 ---
-title: 'Deployment'
-description: 'Learn how to deploy your app'
+title: "Deployment"
+description: "Learn how to deploy your app"
 ---
 
-Your app can be deployed anywhere where a SvelteKit app can be deployed. 
+Your app can be deployed anywhere where a SvelteKit app can be deployed.
 Just make sure to set the correct adapter in `svelte.config.js`.
 
 Follow this guide on Svelte adapters to learn more: https://kit.svelte.dev/docs/adapters
@@ -11,6 +11,7 @@ Follow this guide on Svelte adapters to learn more: https://kit.svelte.dev/docs/
 I host my apps on [Railway](https://railway.app) with the Node adapter, very simple to setup and you can also host your SQL database there.
 
 Other options include:
+
 - [Vercel](https://vercel.com)
 - [Netlify](https://netlify.com)
 - [Render](https://render.com)
@@ -21,15 +22,31 @@ Other options include:
 
 You need to set the following environment variables in your deployment environment:
 
-```
-AUTH_SECRET=1234567890
-AUTH_TRUST_HOST=true
+<CodeGroup>
+```bash .env Auth.js
 PRIVATE_DATABASE_URL=your-database-connection-url
 ORIGIN=https://yourdomain.com
 PRIVATE_LOOPS_API_KEY=key
 PRIVATE_STRIPE_SECRET_KEY=sk_test_1
 PRIVATE_STRIPE_WEBHOOK_SECRET=whsec_1
 PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_1
+AUTH_SECRET=1234567890
+AUTH_TRUST_HOST=true
 ```
+
+```bash .env Supabase
+PRIVATE_DATABASE_URL=your-database-connection-url
+ORIGIN=https://yourdomain.com
+PRIVATE_LOOPS_API_KEY=key
+PRIVATE_STRIPE_SECRET_KEY=sk_test_1
+PRIVATE_STRIPE_WEBHOOK_SECRET=whsec_1
+PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_1
+PUBLIC_SUPABASE_URL="YOUR_SUPABASE_URL"
+PUBLIC_SUPABASE_ANON_KEY="YOUR_SUPABASE_KEY"
+```
+
+
+
+</CodeGroup>
 
 Generate an `AUTH_SECRET` at https://generate-secret.now.sh/32
