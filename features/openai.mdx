@@ -1,0 +1,29 @@
+---
+title: 'OpenAI API (NEW)'
+description: 'Easy AI with OpenAI Integration'
+icon: 'microchip-ai'
+---
+
+The OpenAI API client is located in `src/lib/server/openai.ts`.
+
+<Info>
+    If you don't need the OpenAI API, you can remove the `src/lib/server/openai.ts` file, the `src/routes/(app)/ai` folder and the `src/routes/api/ai` folder. You can always add them back later if you need them.
+</Info>
+
+## Setting up OpenAI
+
+1. Create an account on [OpenAI](https://openai.com/).
+2. Get your API key from [here](https://platform.openai.com/api-keys).
+3. Copy the API key and paste it in your `.env` at `PRIVATE_OPENAI_API_KEY` field.
+
+## Using OpenAI API
+
+The boilerplate comes with 4 examples on how to use the OpenAI API.
+- Chat (GPT-4 Turbo) with streaming messages 
+- Image generation (DALL-E 3)
+- Speech to text (Whisper)
+- Text to speech (tts-1)
+
+You can find the examples in `src/routes/(app)/ai` with the API calls being made to API endpoints in `src/routes/api/ai`.
+
+Please also read the [OpenAI API documentation](https://platform.openai.com/docs/api-reference/introduction) for more information on how to use the API.

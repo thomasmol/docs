@@ -73,12 +73,13 @@
         "features/email",
         "features/authentication",
         "features/payments",
+        "features/openai",
         "features/styling",
         "features/components",
-        "features/seo",
-        "features/blog",
         "features/analytics",
-        "features/support"
+        "features/support",
+        "features/seo",
+        "features/blog"
       ]
     }
   ],

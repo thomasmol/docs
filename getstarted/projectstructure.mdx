@@ -3,4 +3,63 @@ title: 'Project Structure'
 description: ''
 ---
 
+This is the basic structure of the boilerplate:
+```
+src/
+  lib/
+    server/
+    ui/
+      app/
+      components/
+      icons/
+      marketing/
+    clickOutside.ts
+  routes/
+		(app)/
+		(auth)/
+		(landing)/
+		api/
+		+layout.svelte
+		+layout.ts
+		+layout.server.ts
+  app.css
+  app.d.ts
+  app.html
+  hooks.server.ts
+static/
+.env
+package.json
+svelte.config.js
+tsconfig.json
+vite.config.ts
+```
 
+## Lib `src/lib/` 
+The `lib` folder contains all the components and scripts regarding UI components and client SDKs.
+### Server `src/lib/server/`
+In the `server` folder you'll find client SDKs and scripts to be used in the server side, such as the Drizzle, OpenAI, Loops and Stripe SDks.
+
+<Info>SvelteKit protects any code inside the `server` folder from being exposed to the client.</Info>
+
+In `src/lib/server/database` you'll also find the database schema file and migration scripts.
+
+### UI `src/lib/ui/`
+In the `ui` folder you'll find all the UI components used in the project. The `app` folder contains the main components of the app, the `components` folder contains all the components used in the app, the `icons` folder contains all the icons used in the app and the `marketing` folder contains all the components used in the marketing pages.
+
+## Routes `src/routes/`
+### App `src/routes/(app)/`
+All of the routes that are behind a login wall are inside the `(app)` folder.
+
+### Auth `src/routes/(auth)/`
+Auth pages like login are in the `(auth)` folder.
+
+### Landing `src/routes/(landing)/`
+Landing pages are in the `(landing)` folder. These are public and always accessible, whether the user is logged in or not. You should optimize these pages for SEO and conversion.
+
+### API `src/routes/api/`
+
+The `api` folder contains all the API endpoints. These are server-side only and are not exposed to the client.
+
+## Hooks `hooks.server.ts`
+
+In the `hooks.server.ts` file you'll find all the hooks used in the project. Auth is mostly handled here, as well as redirecting users to the correct pages based on their auth status.
