@@ -1,0 +1,60 @@
+---
+title: "Modal"
+description: "A simple reusable modal component."
+icon: "browser"
+---
+
+
+This is a simple resuable modal component. It comes standard with a close button and backdrop. You can also click outside the modal to close it.
+
+The component is made using the DaisyUI modal component: [https://daisyui.com/components/modal](https://daisyui.com/components/modal)
+
+
+## Usage
+
+```html +page.svelte
+<script lang="ts">
+    import Modal from '$lib/ui/components/Modal.svelte';
+	let dialog: HTMLDialogElement;
+</script>
+
+<button type="button" on:click={() => dialog.showModal()}>Open modal</button>
+
+<Modal bind:dialog={dialog}>.
+    <!-- Modal content -->
+    <h1>Modal</h1>
+    <p>This is a modal.</p>
+</Modal>
+
+```
+
+## Modal component
+
+Located at `src/lib/ui/components/Modal.svelte`.
+
+This is what the modal component looks like.
+
+You can customize it to your needs.
+
+```html Modal.svelte
+<script lang="ts">
+	export let dialog: HTMLDialogElement;
+</script>
+
+<dialog id="modal" class="modal w-full" bind:this={dialog}>
+	<div class="modal-box w-11/12 max-w-5xl">
+		<form method="dialog">
+			<button
+				type="submit"
+				class="focus-visbile:ring-0 btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
+				>✕</button>
+		</form>
+		<div>
+			<slot />
+		</div>
+		<form method="dialog" class="modal-backdrop">
+			<button>close</button>
+		</form>
+	</div>
+</dialog>
+```

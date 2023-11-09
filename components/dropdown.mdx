@@ -1,0 +1,63 @@
+---
+title: "Dropdown"
+description: "A simple reusable dropdown component."
+icon: "caret-down"
+---
+
+This is a simple resuable dropdown component. It comes with standard with styling and a clickOutside directive to dismiss the dropdown when clicked outside of the dropdown.
+You can easily change the text of the button and the content of the dropdown.
+
+The component is made using the DaisyUI dropdown component: [https://daisyui.com/components/dropdown](https://daisyui.com/components/dropdown)
+
+Change the `dropdown-bottom` class to `dropdown-top`, `dropdown-left` or `dropdown-right` to change the direction of the dropdown.
+
+Add the class `dropdown-end` to align the dropdown content.
+
+The `clickOutside.ts` script is used to dismiss the dropdown when clicked outside of the dropdown.
+
+
+## Usage
+
+```html +page.svelte
+<script lang="ts">
+	import Dropdown from '$lib/ui/components/Dropdown.svelte';
+</script>
+
+<Dropdown class="dropdown-bottom">
+    <div slot="button"><!-- Dropdown button text --></div>
+    <div slot="content">
+        <!-- Dropdown content -->
+    </div>
+</Dropdown>
+
+```
+
+## Dropdown component 
+
+Located at `src/lib/ui/components/Dropdown.svelte`.
+
+This is what the dropdown component looks like.
+
+You can customize it to your needs.
+
+```html Dropdown.svelte
+<script lang="ts">
+	import clickOutside from '$lib/clickOutside';
+
+	let dropdown: HTMLDetailsElement;
+</script>
+
+<details class="dropdown {$$props.class}" bind:this={dropdown}>
+	<summary
+		class="btn flex items-center gap-2"
+		aria-details="dropdown"
+		use:clickOutside={() => {
+			dropdown.open = false;
+		}}>
+		<slot name="button" />
+	</summary>
+	<div class="menu dropdown-content rounded-box w-52 bg-base-100 shadow">
+		<slot name="content" />
+	</div>
+</details>
+```

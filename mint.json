@@ -62,7 +62,7 @@
       ]
     },
     {
-      "group": "Tutorial",
+      "group": "Tutorials",
       "pages": ["tutorials/authjs", "tutorials/supabase"]
     },
     {
@@ -75,11 +75,20 @@
         "features/payments",
         "features/openai",
         "features/styling",
-        "features/components",
         "features/analytics",
         "features/support",
         "features/seo",
         "features/blog"
+      ]
+    },
+    {
+      "group": "UI Components",
+      "pages": [
+        "components/dropdown",
+        "components/modal",
+        "components/marketing",
+        "components/app",
+        "components/icons"
       ]
     }
   ],
