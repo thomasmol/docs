@@ -1,5 +1,74 @@
 ---
-title: "SEO (coming soon)"
-description: "(coming soon)"
+title: "SEO + Favicon (NEW)"
+description: "Easily setup SEO and Favicons for your website"
 icon: "magnifying-glass"
 ---
+
+Search Engine Optimization (SEO) is the process of improving the quality and quantity of website traffic to a website from search engines like Google or Bing. 
+EO targets unpaid traffic (known as "natural" or "organic" results) rather than direct traffic or paid traffic and is a great way to get more visitors to your website.
+
+Launch Leopard makes SEO easy for you by adding some default and common SEO Metatags and an easy way to override them on a per page basis.
+
+## Setting up Metatags for SEO
+
+The meta tags are located in the root `+layout.svelte` file.
+
+Replace the values in the `defaultSEO` object with your own. These tags are used as default values for all pages. 
+
+```html src/routes/+layout.svelte
+<script lang="ts">
+    // ... other code
+    const defaultSEO = {
+        title: 'Launch Leopard',
+		description: 'A SvelteKit starter template with Supabase',
+		keywords: 'svelte, sveltekit, supabase, starter, boilerplate, saas, typescript',
+		ogimage: `${$page.url.origin}/images/ogimage.png`
+	};
+</script>
+```
+
+### How to override the default SEO tags on a per page basis
+You can override them on a per page basis by adding a `seo` object to the page's `data` object in a `+load.ts`, `+load.server.ts`, `+layout.ts` or `+layout.server.ts` file of that route.
+
+<Info>
+    Tags for invididual pages are optional. If you don't need a specific tag, you can leave it out and the page will use the default value you setup in the root `+layout.svelte` file.
+</Info>
+
+An example of how to override the default SEO tags on a blog page:
+
+```typescript src/routes/(landing)/blog/+page.server.ts (example)
+import { page } from '$app/stores';
+
+export const load = async () => {
+	return {
+		seo: {
+            title: 'Blog',
+            description: 'A collection of articles about SvelteKit and Supabase',
+            keywords: 'svelte, sveltekit, supabase, starter, template, typescript, blog',
+            ogimage: `${$page.url.origin}/images/blog_ogimage.png`
+        }
+	};
+};
+```
+<Warning>
+    The most nested `seo` object will be used. So if you have a `seo` object in your `+layout.ts` file and in your `+page.ts` file, the `seo` object in the `+page.ts` file will be used.
+</Warning>
+
+### Set up Sitemap.xml
+
+Add urls of your marketing pages to the `+server.ts` in `src/sitemap.xml` folder and submit it to Google Search Console so Google can index your pages. Same for Bing Search.
+
+
+// TODO add example and more detail
+
+// TODO These can also be generated automatically at build time, but different setup is needed
+
+
+## How to setup Favicons
+A favicon set is already included in the `static` folder. Replace them with your own.
+
+You can easily generate  set of favicons using [https://favicon.io](https://favicon.io). 
+
+Just upload a png file of your logo and it will generate a set of favicons for you.
+
+Copy the files into the `static` folder and you are good to go (and remove/replace the old ones).
