@@ -1,8 +1,38 @@
 ---
 title: "Database"
-description: "With Drizzle ORM"
+description: "With Drizzle ORM or Supabase"
 icon: "database"
 ---
+
+## Using Supabase
+If you are using Supabase as your database, you can skip this section. 
+
+See the official [Supabase Javascript SDK docs](https://supabase.com/docs/reference/javascript) for more details.
+
+Example of using the Supabase SDK in a server endpoint:
+```javascript +server.ts
+export const GET = (async ({ request, locals }) => {
+	const session = await locals.getSession();
+	if (!session) {
+		throw new Error('Unauthorized');
+	}
+
+	// With Supabase SDK
+	const user = await locals.supabase
+		.from('users')
+		.select('*')
+		.eq('id', session.user.id)
+		.single();
+
+	return new Response(JSON.stringify(user));
+}) satisfies RequestHandler;
+```
+
+<Info>
+    I am working to see if we can use Drizzle ORM and Drizzle Kit with Supabase (especially usefull for db migrations and typesafety). But since Drizzle is still pre 1.0, usage is limited.
+</Info>
+
+## Using Auth.js with Drizzle ORM
 
 Launch Leopard comes with DrizzleORM, a lightweight and blazing fast Typescript ORM.
 It supports Postgres, MySQL and SQLite databases.
