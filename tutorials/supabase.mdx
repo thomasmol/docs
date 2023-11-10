@@ -16,4 +16,67 @@ iconType: "solid"
 PUBLIC_SUPABASE_URL="YOUR_SUPABASE_URL"
 PUBLIC_SUPABASE_ANON_KEY="YOUR_SUPABASE_KEY"
 PRIVATE_DATABASE_URL="YOUR_DATABASE_URL"
+PRIVATE_SUPABASE_SERVICE_ROLE_API_KEY="SECRET_ROLE_KEY"
+```
+
+<Warning>
+    The `PRIVATE_SUPABASE_SERVICE_ROLE_API_KEY` is used to bypass the Row Level Security policies. This is used for Stripe webhooks, since they don't have a user context. Make sure to keep this key secret, and don't share it with anyone.
+</Warning>
+
+
+### Setting up the database
+
+Add a profile table to your database with the following SQL:
+
+This will also create a trigger that will automatically create a profile for every new user.
+
+
+```sql
+create table public.profiles (
+  id uuid not null references auth.users on delete cascade,
+  first_name text,
+  last_name text,
+  stripe_customer_id varchar(255),
+  subscription varchar(255),
+  primary key (id)
+);
+
+alter table public.profiles enable row level security;
+-- Create a policy that allows users to update only their own profiles
+CREATE POLICY update_own_profile ON public.profiles
+    FOR UPDATE
+    USING (auth.uid() = id);
+
+-- Create a policy that allows users to view only their own profile
+CREATE POLICY select_own_profile ON public.profiles
+    FOR SELECT
+    USING (auth.uid() = id);
+
+-- inserts a row into public.profiles
+create function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.profiles (id)
+  values (new.id);
+  return new;
+end;
+$$;
+
+-- trigger the function every time a user is created
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+```
+
+Already have users but didn't setup a profiles table? Run this SQL to create profiles for them:
+
+```sql
+INSERT INTO public.profiles (id)
+SELECT u.id
+FROM auth.users u
+LEFT JOIN public.profiles p ON u.id = p.id
+WHERE p.id IS NULL;
 ```
