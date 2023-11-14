@@ -1,0 +1,201 @@
+---
+title: "App Components"
+description: "A list of all app UI components, like navbars."
+icon: "sidebar"
+---
+
+## App UI Components
+
+`src/lib/ui/app`
+
+- Navbar
+- SidebarNav
+- BottomNavbar
+
+In the app layout (`src/routes/(app)/+layout.svelte`), a default scafollding is provided with the SidebarNav and a Navbar + BottomNavbar when on mobile devices.
+
+You can customize it to your needs.
+
+---
+title: "Modal"
+description: "A simple reusable modal component."
+icon: "browser"
+---
+
+
+This is a simple resuable modal component. It comes standard with a close button and backdrop. You can also click outside the modal to close it.
+
+The component is made using the DaisyUI modal component: [https://daisyui.com/components/modal](https://daisyui.com/components/modal)
+
+
+## Usage
+
+```html +page.svelte
+<script lang="ts">
+    import Modal from '$lib/ui/components/Modal.svelte';
+	let dialog: HTMLDialogElement;
+</script>
+
+<button type="button" on:click={() => dialog.showModal()}>Open modal</button>
+
+<Modal bind:dialog={dialog}>.
+    <!-- Modal content -->
+    <h1>Modal</h1>
+    <p>This is a modal.</p>
+</Modal>
+
+```
+
+## Modal component
+
+Located at `src/lib/ui/components/Modal.svelte`.
+
+This is what the modal component looks like.
+
+You can customize it to your needs.
+
+```html Modal.svelte
+<script lang="ts">
+	export let dialog: HTMLDialogElement;
+</script>
+
+<dialog id="modal" class="modal w-full" bind:this={dialog}>
+	<div class="modal-box w-11/12 max-w-5xl">
+		<form method="dialog">
+			<button
+				type="submit"
+				class="focus-visbile:ring-0 btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
+				>✕</button>
+		</form>
+		<div>
+			<slot />
+		</div>
+	</div>
+	<form method="dialog" class="modal-backdrop">
+		<button>close</button>
+	</form>
+</dialog>
+```
+---
+title: "Dropdown"
+description: "A simple reusable dropdown component."
+icon: "caret-down"
+---
+
+This is a simple resuable dropdown component. It comes with standard with styling and a clickOutside directive to dismiss the dropdown when clicked outside of the dropdown.
+You can easily change the text of the button and the content of the dropdown.
+
+The component is made using the DaisyUI dropdown component: [https://daisyui.com/components/dropdown](https://daisyui.com/components/dropdown)
+
+Change the `dropdown-bottom` class to `dropdown-top`, `dropdown-left` or `dropdown-right` to change the direction of the dropdown.
+
+Add the class `dropdown-end` to align the dropdown content.
+
+The `clickOutside.ts` script is used to dismiss the dropdown when clicked outside of the dropdown.
+
+
+## Usage
+
+```html +page.svelte
+<script lang="ts">
+	import Dropdown from '$lib/ui/components/Dropdown.svelte';
+</script>
+
+<Dropdown class="dropdown-bottom">
+    <div slot="button"><!-- Dropdown button text --></div>
+    <div slot="content">
+        <!-- Dropdown content -->
+    </div>
+</Dropdown>
+
+```
+
+## Dropdown component 
+
+Located at `src/lib/ui/components/Dropdown.svelte`.
+
+This is what the dropdown component looks like.
+
+You can customize it to your needs.
+
+```html Dropdown.svelte
+<script lang="ts">
+	import clickOutside from '$lib/clickOutside';
+
+	let dropdown: HTMLDetailsElement;
+</script>
+
+<details class="dropdown {$$props.class}" bind:this={dropdown}>
+	<summary
+		class="btn flex items-center gap-2"
+		aria-details="dropdown"
+		use:clickOutside={() => {
+			dropdown.open = false;
+		}}>
+		<slot name="button" />
+	</summary>
+	<div class="menu dropdown-content rounded-box w-52 bg-base-100 p-0 shadow">
+		<slot name="content" />
+	</div>
+</details>
+```
+---
+title: "Marketing Components"
+description: "All marketing components like pricing table, hero sections and more."
+icon: "bullseye-pointer"
+---
+
+## Marketing UI Components
+
+`src/lib/ui/marketing`
+
+These components are used in the marketing pages.
+Currently they include:
+
+- Navbar
+- Hero
+- Features
+- Pricing
+- Footer
+- Testimonial
+- LogoCloud
+- FAQ
+
+In the marketing layout (`src/routes/(landing)/+page.svelte` and `src/routes/(landing)/+layout.svelte`), a default scafollding is provided with the Navbar, Hero, LogoCloud, Features, Pricing, FAQ, Testimonial and Footer components.
+
+---
+title: "Icons"
+description: "How to use icons"
+icon: "icons"
+---
+
+By default a few icons are included, located in `src/lib/ui/icons/`. 
+
+The icons: 
+- ArrowTopRightOnSquare (used to indicate an external link)
+- Bars3 (used to indicate a menu)
+- Check (used to indicate a success)
+- ChevronDown (used to indicate a dropdown)
+- ChevronUp (used to indicate a dropdown)
+- Home (used to indicate a home link)
+
+They are taken from [Heroicons](https://heroicons.com/) and are free to use. 
+Other sources for icons:
+- [Lucide Icons](https://lucide.dev/icons/)
+- [Feather Icons](https://feathericons.com/)
+
+You can add new icons in the `src/lib/ui/icons/` folder. 
+
+Just copy the svg code and paste in a new `[icon_name].svelte` file.
+
+## Usage
+
+```html +page.svelte
+<script lang="ts">
+    import Check from '$lib/ui/icons/Check.svelte';
+</script>
+
+<Check/>
+```
+
+

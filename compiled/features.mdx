@@ -1,0 +1,462 @@
+---
+title: "SEO + Favicon (NEW)"
+description: "Easily setup SEO and Favicons for your website"
+icon: "magnifying-glass"
+---
+
+Search Engine Optimization (SEO) is the process of improving the quality and quantity of website traffic to a website from search engines like Google or Bing. 
+EO targets unpaid traffic (known as "natural" or "organic" results) rather than direct traffic or paid traffic and is a great way to get more visitors to your website.
+
+Launch Leopard makes SEO easy for you by adding some default and common SEO Metatags and an easy way to override them on a per page basis.
+
+## Setting up Metatags for SEO
+
+The meta tags are located in the root `+layout.svelte` file.
+
+Replace the values in the `defaultSEO` object with your own. These tags are used as default values for all pages. 
+
+```html src/routes/+layout.svelte
+<script lang="ts">
+    // ... other code
+    const defaultSEO = {
+        title: 'Launch Leopard',
+		description: 'A SvelteKit starter template with Supabase',
+		keywords: 'svelte, sveltekit, supabase, starter, boilerplate, saas, typescript',
+		ogimage: `${$page.url.origin}/images/ogimage.png`
+	};
+</script>
+```
+
+### How to override the default SEO tags on a per page basis
+You can override them on a per page basis by adding a `seo` object to the page's `data` object in a `+load.ts`, `+load.server.ts`, `+layout.ts` or `+layout.server.ts` file of that route.
+
+<Info>
+    Tags for invididual pages are optional. If you don't need a specific tag, you can leave it out and the page will use the default value you setup in the root `+layout.svelte` file.
+</Info>
+
+An example of how to override the default SEO tags on a blog page:
+
+```typescript src/routes/(landing)/blog/+page.server.ts (example)
+import { page } from '$app/stores';
+
+export const load = async () => {
+	return {
+		seo: {
+            title: 'Blog',
+            description: 'A collection of articles about SvelteKit and Supabase',
+            keywords: 'svelte, sveltekit, supabase, starter, template, typescript, blog',
+            ogimage: `${$page.url.origin}/images/blog_ogimage.png`
+        }
+	};
+};
+```
+<Warning>
+    The most nested `seo` object will be used. So if you have a `seo` object in your `+layout.ts` file and in your `+page.ts` file, the `seo` object in the `+page.ts` file will be used.
+</Warning>
+
+### Set up Sitemap.xml
+
+Add urls of your marketing pages to the `+server.ts` in `src/sitemap.xml` folder and submit it to Google Search Console so Google can index your pages. Same for Bing Search.
+
+
+// TODO add example and more detail
+
+// TODO These can also be generated automatically at build time, but different setup is needed
+
+
+## How to setup Favicons
+A favicon set is already included in the `static` folder. Replace them with your own.
+
+You can easily generate  set of favicons using [https://favicon.io](https://favicon.io). 
+
+Just upload a png file of your logo and it will generate a set of favicons for you.
+
+Copy the files into the `static` folder and you are good to go (and remove/replace the old ones).
+
+---
+title: "Database"
+description: "With Drizzle ORM or Supabase"
+icon: "database"
+---
+
+## Using Supabase
+If you are using Supabase as your database, you can skip this section. 
+
+See the official [Supabase Javascript SDK docs](https://supabase.com/docs/reference/javascript) for more details.
+
+Example of using the Supabase SDK in a server endpoint:
+```javascript +server.ts
+export const GET = (async ({ request, locals }) => {
+	const session = await locals.getSession();
+	if (!session) {
+		throw new Error('Unauthorized');
+	}
+
+	// With Supabase SDK
+	const user = await locals.supabase
+		.from('users')
+		.select('*')
+		.eq('id', session.user.id)
+		.single();
+
+	return new Response(JSON.stringify(user));
+}) satisfies RequestHandler;
+```
+
+<Info>
+    I am working to see if we can use Drizzle ORM and Drizzle Kit with Supabase (especially usefull for db migrations and typesafety). But since Drizzle is still pre 1.0, usage is limited.
+</Info>
+
+## Using Auth.js with Drizzle ORM
+
+Launch Leopard comes with DrizzleORM, a lightweight and blazing fast Typescript ORM.
+It supports Postgres, MySQL and SQLite databases.
+
+Check their [docs](https://orm.drizzle.team/docs/overview) for more details on how to use it.
+
+By default, Drizzle is setup with a Postgres database.
+The database schema is found in `src/lib/server/database/schema.ts`.
+
+Also see the `drizzle.config.ts` for the drizzle configuration.
+
+## Updating the database schema
+
+<Steps>
+    <Step title="Make changes to your schema">
+      Just make changes to your schema in `src/lib/server/database/schema.ts`.
+
+    </Step>
+
+    <Step title="Generate migration files">
+        Generate the migration files with
+        ```bash
+        npm run db:generate
+        ```
+        Migration files are located in `drizzle/`
+    </Step>
+    <Step title="Run migration">
+        Then migrate them to create the tables in your database:
+         ```bash
+        npm run db:migrate
+        ```
+
+        The migration script is also run when building your app in production with `npm run build`.
+    </Step>
+
+</Steps>
+
+
+## Using other database providers
+
+Drizzle can also be setup with a MySQL or SQLite database.
+
+Make the changes in `drizzle.config.ts`, `src/lib/server/database/drizzle.ts`, `src/lib/server/database/schema.ts` and `src/lib/server/database/migrate.ts` files.
+Check the [Drizzle docs](https://orm.drizzle.team/docs/overview) for more details.
+
+---
+title: "Authentication"
+description: "With Auth.js or Supabase"
+icon: "key"
+---
+Follow tutorial depending on the base repository you are using:
+<CardGroup cols={2}>
+<Card title="Auth.js Tutorial" href="/tutorials/authjs">
+	<img src="/images/tech/authjs.webp" width="36px" height="36px"/>
+	Follow this tutorial if you are using the Auth.js repository.
+</Card>
+<Card title="Supabase Tutorial" href="/tutorials/supabase">
+	<img src="/images/tech/supabase.webp" width="36px" height="36px"/>
+	Follow this tutorial if you are using the Supabase repository.
+</Card>
+</CardGroup>
+---
+title: 'OpenAI API (NEW)'
+description: 'Easy AI with OpenAI Integration'
+icon: 'microchip-ai'
+---
+
+The OpenAI API client is located in `src/lib/server/openai.ts`.
+
+<Info>
+    If you don't need the OpenAI API, you can remove the `src/lib/server/openai.ts` file, the `src/routes/(app)/ai` folder and the `src/routes/api/ai` folder. You can always add them back later if you need them.
+</Info>
+
+## Setting up OpenAI
+
+1. Create an account on [OpenAI](https://openai.com/).
+2. Get your API key from [here](https://platform.openai.com/api-keys).
+3. Copy the API key and paste it in your `.env` at `PRIVATE_OPENAI_API_KEY` field.
+
+## Using OpenAI API
+
+The boilerplate comes with 4 examples on how to use the OpenAI API.
+- Chat (GPT-4 Turbo) with streaming messages 
+- Image generation (DALL-E 3)
+- Speech to text (Whisper)
+- Text to speech (tts-1)
+
+You can find the examples in `src/routes/(app)/ai` with the API calls being made to API endpoints in `src/routes/api/ai`.
+
+Please also read the [OpenAI API documentation](https://platform.openai.com/docs/api-reference/introduction) for more information on how to use the API.
+---
+title: "Support"
+description: "Add a support system to your app"
+icon: "comments"
+---
+
+Customer support is a critical part of any business. It's how you keep your customers happy and how you learn about what's working and what's not.
+
+The easiest way is to add a chat to your app, here are some options:
+* [Atlas](https://atlas.so/) (free tier)
+* [Crisp](https://crisp.chat/en/) (free tier)
+* [Intercom](https://www.intercom.com/) (paid)
+
+All of these services also allow you to create an simple dedicated help center page for tutorials and FAQs.
+
+## Setting up a support system
+
+1. Create account with one of the above services
+2. Add the code snippet to `src/app.html` in the `<head>` tag
+---
+title: 'Email'
+description: 'Transactional + Marketing email with Loops.so'
+icon: 'at'
+---
+[Loops.so](https://loops.so) is a email platform for sending transactional and marketing emails. Find their docs [here](https://loops.so/docs).
+
+## Setting up Email with Loops
+<Steps>
+    <Step title="Create Loops account">
+        Go to [Loops](https://app.loops.so/register) and create an account.
+    </Step>
+   <Step title="Setup domain records">
+        Follow their [quickstart](https://loops.so/docs/start-here) guide to setup your domain records.
+   </Step>
+   <Step title="Generate API Key">
+        Got to the [API settings](https://app.loops.so/settings?page=api) page and generate a new API Key.
+   </Step>
+    <Step title="Set .env var">
+        Set your API key in your `.env` file as `PRIVATE_LOOPS_API_KEY`.
+    </Step>
+</Steps>
+
+See the [JavaScript SDK docs](https://loops.so/docs/sdks/javascript#sendtransactionalemail) of Loops for more information on how to use it.
+
+## Adding users to audience
+
+<Tabs>
+  <Tab title="Auth.js">
+New users are automatically added to your Loops audience when they sign up.
+This is done in `hooks.server.ts`, when the `createUser` event is triggered like so:
+```ts hooks.server.ts (Auth.js boilerplate)
+export const handle = sequence(
+	SvelteKitAuth({
+		// ...
+		events: {
+			createUser: async (message) => {
+				await loops.createContact(message.user.email ?? '', { userId: message.user.id });
+			}
+		},
+		// ...
+	}),
+	// ...
+) satisfies Handle;
+```
+  </Tab>
+  <Tab title="Supabase">
+    Loops is currently working on an integration with Supabase, so watch out for that!
+
+	For now, you can setup up Database Webhooks with Supabase to add users to your Loops audience.
+
+	* Official Supabase Webhooks [guide](https://supabase.com/docs/guides/database/webhooks)
+	* Or follow [this](https://github.com/triggerdotdev/supabase-to-loops) Trigger.dev guide
+	* Or implement your own way of adding users to your Loops audience, like using the AuthStateChanged event
+  </Tab>
+
+</Tabs>
+---
+title: 'SvelteKit'
+description: 'Core Framework'
+icon: 'frame'
+---
+
+[SvelteKit](https://kit.svelte.dev/) is a web framework for building web applications of all sizes, with a beautiful development experience and flexible filesystem-based routing.
+
+Check the [official documentation](https://kit.svelte.dev/docs) for more information.
+
+Typescript is the default in Launch Leopard with [Zero-effort type safety](https://svelte.dev/blog/zero-config-type-safety) enabled.
+
+Make sure you have the [Svelte for VS Code](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) extension installed to get type safety.
+---
+title: 'Styling'
+description: 'With TailwindCSS + DaisyUI'
+icon: 'pencil'
+---
+
+TailwindCSS is installed by default with the typography, DaisyUI and prettier plugins.
+
+## TailwindCSS
+Check the [TailwindCSS documentation](https://tailwindcss.com/docs) for more information.
+
+## DaisyUI
+DaisyUI is a TailwindCSS component library and is very useful to quickly build a website.
+
+Check the [DaisyUI documentation](https://daisyui.com/docs) for more information.
+---
+title: "Analytics "
+description: "Add analytics to your SaaS app"
+icon: "chart-mixed"
+---
+
+Analytics is a vital part of any SaaS business. It helps you understand how your customers are using your product, and how you can improve it.
+
+I recommend a privacy friendly analytics tool like [Plausible](https://plausible.io/) or [Simple Analytics](https://www.simpleanalytics.com). 
+They both have a free trial and are very affordable.
+
+## Setup Analytics
+
+1. Sign up at either [Plausible](https://plausible.io/) or [Simple Analytics](https://www.simpleanalytics.com)
+2. Add the tracking code to your `src/app.html` in the `<head>` section
+3. Follow any further instructions on the analytics provider to set up your account
+---
+title: "Blog (coming soon)"
+description: "(coming soon)"
+icon: "newspaper"
+---
+---
+title: "Payments"
+description: "With Stripe"
+icon: "credit-card"
+---
+
+Stripe is used to handle payments, invoicing, customer portals, subscriptions and more.
+The standard database schema comes with a `stripeCustomerId` field on the `User` model, so you can easily relate payments and subscriptions to users.
+
+<Note>
+    Please, read how Stripe works at <a target="_blank" href="https://stripe.com/docs">stripe.com/docs</a>, to learn about `webhooks`, `checkout_session`, "test mode" and more.
+</Note>
+
+## Setting up Stripe
+
+<Steps>
+  <Step title="Create a Stripe account">
+    At [Stripe](https://dashboard.stripe.com/register){" "}
+  </Step>
+  <Step title="Activate payments">
+    You'll need to activate payments on your account. You'll need to be
+    registered as a business (anywhere on earth), and you'll need to provide
+    some details about your business.
+  </Step>
+  <Step title="Branding, Emails, Customer Portal">
+    * In `Settings > Branding` you can set your logo and colors
+    * In `Settings > Customer Emails` turn on emails for successful payments and refunds.
+    * In `Settings > Customer Portal` turn on the customer portal, (users can manage their subscriptions and payment methods and view invoices here)
+  </Step>
+  <Step title="Add webhooks endpoint">
+    In `Developers > Webhooks` add a webhook with the url `https://[YOUR DOMAIN]/api/webhooks/stripe` and select the events you want to receive (see below).
+    * **Testing**: enable `test mode` and use the Stripe CLI to enable webhooks on your local machine. Follow their [guide here](https://dashboard.stripe.com/webhooks/create?endpoint_location=local) for more info.
+  </Step>
+  <Step title="Copy keys to .env">
+    In `Developers > API Keys` copy the keys to your `.env` file. The webhook secret is found in the `Webhooks` section.
+    Make sure you use the `test` keys when in `test mode` and the `live` keys when in production.
+    ```env .env
+    PRIVATE_STRIPE_SECRET_KEY=sk_test_1
+    PRIVATE_STRIPE_WEBHOOK_SECRET=whsec_1
+    PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_1
+    ```
+  </Step>
+</Steps>
+
+## Webhooks
+
+Webhooks are used to receive events from Stripe, like when a payment is made or a subscription is cancelled.
+Some commonly used events are added in the `src/routes/api/webhooks/stripe/+server.ts` file.
+Also, the user is automatically updated with the `stripeCustomerId` when a customer is created.
+
+```ts src/routes/api/webhooks/stripe/+server.ts
+switch (event.type) {
+    case 'checkout.session.completed': { // handle new payment (one-time or subscription)
+        const checkoutSession = event.data.object;
+        console.log(checkoutSession);
+        break;
+    }
+    case 'checkout.session.expired': { // handle expired payment
+        const checkoutSession = event.data.object;
+        console.log(checkoutSession);
+        break;
+    }
+    case 'customer.created': { // handle new customer
+        const customer = event.data.object;
+        await db
+            .update(users)
+            .set({ stripeCustomerId: customer.id })
+            .where(eq(users.email, customer.email ?? ''));
+        break;
+    }
+    case 'customer.source.expiring': { // handle expiring card, notify user
+        const customerCardOrSource = event.data.object;
+        console.log(customerCardOrSource);
+        break;
+    }
+    case 'customer.subscription.deleted': { // handle cancelled subscription, revoke access, send winback email
+        const subscription = event.data.object;
+        console.log(subscription);
+        break;
+    }
+    case 'customer.subscription.updated': { // handle subscription changes, revoke access, notify user
+        const subscription = event.data.object;
+        console.log(subscription);
+        break;
+    }
+```
+
+---
+title: "UI Components"
+description: "Based on DaisyUI"
+icon: "sidebar"
+---
+
+Launch Leopard comes with a set of UI components based on [DaisyUI](https://daisyui.com/). A quick overview:
+
+Components can be found in `src/lib/ui`. They are organized into folders based on their usage. For example, `src/lib/ui/marketing` contains components used in the marketing pages.
+
+<Info>More components and dedicated docs will be added in the future.</Info>
+
+## Marketing UI Components
+
+`src/lib/ui/marketing`
+
+These components are used in the marketing pages.
+Currently they include:
+
+- Navbar
+- Hero
+- Features
+- Pricing
+- Footer
+- Testimonial
+- LogoCloud
+- FAQ
+
+In the marketing layout (`src/routes/(landing)/+page.svelte` and `src/routes/(landing)/+layout.svelte`), a default scafollding is provided with the Navbar, Hero, LogoCloud, Features, Pricing, FAQ, Testimonial and Footer components.
+
+## App UI Components
+
+`src/lib/ui/app`
+
+- Navbar
+- SidebarNav
+- BottomNavbar
+
+In the app layout (`src/routes/(app)/+layout.svelte`), a default scafollding is provided with the SidebarNav and a Navbar + BottomNavbar when on mobile devices.
+
+You can customize it to your needs.
+
+## General UI Components
+
+`src/lib/ui/components`
+
+- Modal
+- Dropdown
+
+Check how these components work in the Navbar components. (Modal explanation coming soon)

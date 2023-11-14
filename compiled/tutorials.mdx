@@ -1,0 +1,183 @@
+---
+title: "Supabase"
+description: "Setup Launch Leopard with Supabase"
+icon: "bolt"
+iconType: "solid"
+---
+
+## Setting up the Supabase boilerplate
+
+1. Go to [Supabase](https://supabase.com/) and create an account. 
+2. Once you have created an account, create a new project. 
+3. Once you have created a project, go to the project settings and go to `Project Settings > API` and copy the `URL`, `anon public` API key to your `.env` file. 
+4. Then go to `Project Settings > Database` and copy the `Nodejs Connection string` to your `.env` file (make sure to replace [YOUR-PASSWORD] with your password).
+
+```bash .env
+PUBLIC_SUPABASE_URL="YOUR_SUPABASE_URL"
+PUBLIC_SUPABASE_ANON_KEY="YOUR_SUPABASE_KEY"
+PRIVATE_DATABASE_URL="YOUR_DATABASE_URL"
+PRIVATE_SUPABASE_SERVICE_ROLE_API_KEY="SECRET_ROLE_KEY"
+```
+
+<Warning>
+    The `PRIVATE_SUPABASE_SERVICE_ROLE_API_KEY` is used to bypass the Row Level Security policies. This is used for Stripe webhooks, since they don't have a user context. Make sure to keep this key secret, and don't share it with anyone.
+</Warning>
+
+
+### Setting up the database
+
+Add a profile table to your database with the following SQL:
+
+This will also create a trigger that will automatically create a profile for every new user.
+
+
+```sql
+create table public.profiles (
+  id uuid not null references auth.users on delete cascade,
+  first_name text,
+  last_name text,
+  stripe_customer_id varchar(255),
+  subscription varchar(255),
+  primary key (id)
+);
+
+alter table public.profiles enable row level security;
+-- Create a policy that allows users to update only their own profiles
+CREATE POLICY update_own_profile ON public.profiles
+    FOR UPDATE
+    USING (auth.uid() = id);
+
+-- Create a policy that allows users to view only their own profile
+CREATE POLICY select_own_profile ON public.profiles
+    FOR SELECT
+    USING (auth.uid() = id);
+
+-- inserts a row into public.profiles
+create function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.profiles (id)
+  values (new.id);
+  return new;
+end;
+$$;
+
+-- trigger the function every time a user is created
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+```
+
+Already have users but didn't setup a profiles table? Run this SQL to create profiles for them:
+
+```sql
+INSERT INTO public.profiles (id)
+SELECT u.id
+FROM auth.users u
+LEFT JOIN public.profiles p ON u.id = p.id
+WHERE p.id IS NULL;
+```
+---
+title: "Auth.js "
+description: "Setup Launch Leopard with Auth.js"
+icon: "shield-halved"
+iconType: "solid"
+---
+
+[Auth.js](https://authjs.dev) (previously NextAuth.js) is a authentication library that is framework and runtime agnostic.
+
+Check the [Auth.js documentation for SvelteKit](https://authjs.dev/reference/sveltekit) for more information.
+
+<Warning>
+  Note that Auth.js and its adapter and framework API's are pre-1.0. They are
+  likely to change.
+</Warning>
+
+## Setting up the Auth.js boilerplate
+
+By default Launch Leopard uses the email provider (with magic login links) for authentication.
+
+Here is how to set it up:
+
+<Steps>
+    <Step title="Create new Postgres db">
+        Create a new Postgres database locally or on a db host like [Railway](https://railway.app/) or [Vercel](https://vercel.com).
+        
+        Postgres database [docs](https://www.postgresql.org) (use to setup locally)
+    </Step>
+
+    <Step title="Update .env file">
+        Update the `.env` file with your Postgres database connection string:
+       `PRIVATE_DATABASE_URL=[YOUR POSTGRES CONNECTION STRING]`
+    </Step>
+    <Step title="Run migrations">
+        The database schema has all the tables needed for Auth.js, located in `src/lib/server/database/schema.ts`
+
+        In your terminal, run
+        ```bash
+        npm run db:generate
+        npm run db:migrate
+        ```
+        to create the database migration files and run the migration with Drizzle Kit
+    </Step>
+    <Step title="Setup Loops">
+        Make sure you have setup Loops (transcactional + marketing email platform), check the guide [here](/features/email).
+
+        <Note>You can also setup other methods to send emails, like using [Nodemailer](https://nodemailer.com) or [Resend](https://resend.dev) (these email services are transactional email only). You'll have to change the `sendVerificationRequest` function in `hooks.server.ts` for this.</Note>
+    </Step>
+    <Step title="Create new Transactional email">
+        Create a new transcactional email in Loops [here](https://app.loops.so/transactional).
+
+    Add a datavariable called `verificationUrl` in the email template. That's where the verification url will be added.
+    <img height="200" width="auto" src="/images/loopstransactional.png" />
+
+      You can customize and style the email template however you like.
+
+      Hit "Next" and publish the email template.
+    </Step>
+    <Step title="Set the transactional id">
+      You should now see a TRANSACTIONAL ID.
+      <img height="200" width="auto" src="/images/loopstransid.png" />
+      Copy the TRANSACTIONAL ID and set it in `hooks.server.ts` in the `EmailProvder` provider in the body of the `fetch` request.
+
+```ts hooks.server.ts (Auth.js boilerplate)
+export const handle = sequence(
+  SvelteKitAuth({
+    // ...
+    providers: [
+      EmailProvider({
+        sendVerificationRequest: async ({ identifier: email, url }) => {
+          await loops.sendTransactionalEmail("[YOUR TRANSACTIONAL ID]", email, {
+            verificationUrl: url,
+          });
+        },
+      }),
+    ],
+  })
+  // ...
+) satisfies Handle;
+```
+
+</Step>
+
+</Steps>
+
+### Other auth providers
+
+Auth.js implements many auth providers, like email, Google, Facebook, Twitter, GitHub, and more.
+
+Add the providers to your `hooks.server.ts` and signin pages.
+
+See the [Auth.js docs](https://authjs.dev/guides) for more information how to implement other providers.
+
+## Database Adapters
+
+Auth.js also implements many database adapters, like Drizzle, Supabase, Prisma, and more.
+
+By default, Launch Leopard implements the Drizzle adapter.
+
+See the [database](/features/database) section for more information.
+
