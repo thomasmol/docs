@@ -1,0 +1,87 @@
+---
+title: "ThemeController (NEW)"
+description: "Dropdown for setting a DaisyUI theme"
+icon: "sun"
+---
+
+* The ThemeController component can be used anywhere in your app to allow users to change the theme.
+* Please read the docs on [Styling & Themes](/features/styling) to learn how themes are applied to your app.
+* The component is used in the Marketing Navbar component located in `src/lib/ui/marketing/Navbar.svelte`.
+
+## Usage
+
+```html +page.svelte (example)
+<script lang="ts">
+	import ThemeController from '$lib/ui/components/ThemeController.svelte';
+</script>
+
+<ThemeController />
+```
+
+## ThemeController component 
+
+Located at `src/lib/ui/components/ThemeController.svelte`.
+
+Customize it to the themes that you use. Make sure the themes are also in `tailwind.config.js` file.
+
+Please read the docs on [Styling & Themes](/features/styling) to learn more about how themes work.
+
+```html ThemeController.svelte
+<script lang="ts">
+	import { browser } from '$app/environment';
+	import { themeStore } from '$lib/stores/themeStore';
+	import ChevronDown from '../icons/ChevronDown.svelte';
+	import Dropdown from './Dropdown.svelte';
+
+	// Set selected theme based on theme store
+	let selectedTheme: string = $themeStore;
+
+	function setThemeCookie() {
+		// Update theme cookie
+		document.cookie = `theme=${selectedTheme};path=/;max-age=2147483647`;
+
+		// Update theme store, so theme is applied to app (see root +layout.svelte)
+		$themeStore = selectedTheme;
+	}
+
+	// Function needs access to document for setting cookie, so only run in browser
+	// This is run evertime the selectedTheme changes
+	$: if (selectedTheme && browser) {
+		setThemeCookie();
+	}
+</script>
+
+<Dropdown>
+	<div slot="button" class="flex items-center gap-1">Theme <ChevronDown /></div>
+	<div slot="content">
+		<ul class="menu px-1">
+			<!-- Add your themes here, value attribute must correspond to theme name -->
+			<li>
+				<input
+					type="radio"
+					bind:group={selectedTheme}
+					class="btn btn-ghost btn-sm btn-block justify-start"
+					aria-label="System"
+					value="default" />
+			</li>
+			<li>
+				<input
+					type="radio"
+					bind:group={selectedTheme}
+					class="btn btn-ghost btn-sm btn-block justify-start"
+					aria-label="Light"
+					value="light" />
+			</li>
+			<li>
+				<input
+					type="radio"
+					bind:group={selectedTheme}
+					class="btn btn-ghost btn-sm btn-block justify-start"
+					aria-label="Dark"
+					value="dark" />
+			</li>
+		</ul>
+	</div>
+</Dropdown>
+
+```

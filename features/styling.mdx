@@ -1,15 +1,59 @@
 ---
-title: 'Styling'
+title: 'Styling & Themes (NEW)'
 description: 'With TailwindCSS + DaisyUI'
 icon: 'pencil'
 ---
 
+## Styling
 TailwindCSS is installed by default with the typography, DaisyUI and prettier plugins.
 
-## TailwindCSS
-Check the [TailwindCSS documentation](https://tailwindcss.com/docs) for more information.
+### TailwindCSS
+* TailwindCSS is a utility-first CSS framework. It is very useful to quickly style your website.
+* Check the [TailwindCSS documentation](https://tailwindcss.com/docs) for more information.
 
-## DaisyUI
-DaisyUI is a TailwindCSS component library and is very useful to quickly build a website.
+### DaisyUI
+* DaisyUI is a TailwindCSS component library and is very useful to quickly build a website.
+* Check the [DaisyUI documentation](https://daisyui.com/docs) for more information.
 
-Check the [DaisyUI documentation](https://daisyui.com/docs) for more information.
+## Themes (with DaisyUI)
+By default, the `light` and `dark` theme of DaisyUI are included.
+
+* You can add themes in `tailwind.config.js`.
+* Please check [https://daisyui.com/docs/themes/](https://daisyui.com/docs/themes/) on how to add and create custom themes.
+* When the `default` theme is selected, the theme will adhere to the system theme (dark or light).
+
+### How it works
+DaisyUI 4.0 introduced a new component called `ThemeController` to switch between themes with only CSS. However, using only the built in `ThemeController` component would not persist the selected theme on page reload.
+
+Therefore we added some extra code and created a custom `ThemeController` component that involves saving the theme in a cookie and writable store.
+
+In the root `+layout.svelte` there is a hidden checkbox that is always checked. This checkbox is used to select a theme using the `$themeStore` store.
+
+The `$themeStore` is a writable store that is used to store the current theme. This store in itself won't persist the theme on page reload. 
+Check the custom [ThemeController](/components/themecontroller) component on how to do this.
+
+```html +layout.svelte (root)
+<script lang="ts">
+    // ...
+
+    // Set theme from page data, which gets value from cookie (see root +layout.server.ts)
+	$themeStore = $page.data.theme;
+
+    // ...
+</script>
+
+<input type="checkbox" name="theme" class="theme-controller hidden" checked value={$themeStore} />
+```
+
+On a page load (in the root `+layout.server.ts`), the theme is set based on a cookie with name 'theme' or defaults to `'default'` (system theme).
+
+```ts +layout.server.ts (root)
+export const load = async ({ locals: { getSession }, cookies}) => {
+	// Get the theme from the cookie, or default to 'default'
+	const theme = cookies.get('theme') || 'default';
+	return {
+		session: await getSession(),
+		theme
+	};
+};
+```
