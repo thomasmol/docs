@@ -1,0 +1,26 @@
+---
+title: "Navbar"
+description: "Navbar.svelte is a component that renders a top navigation bar menu."
+icon: "bars"
+---
+
+Renders a top navigation menu with account dropdown for the app environment. 
+This component is used in the `+layout.svelte` of the `(app)` and is hidden on desktop.
+
+<Frame caption="Navbar.svelte ">
+  <img src="/images/components/appnavbar.png" />
+</Frame>
+
+
+## Basic Usage
+
+Add your own logo and navigation items to the `Navbar.svelte` component.
+
+To import the component, use:
+```html +layout.svelte
+<script lang="ts">
+    import Navbar from '$lib/ui/app/Navbar.svelte';
+</script>
+
+<Navbar/>
+```

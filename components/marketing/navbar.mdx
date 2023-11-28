@@ -1,0 +1,28 @@
+---
+title: "Navbar"
+description: "Navbar.svelte is a component that renders a top navigation bar menu on the landing page."
+icon: ""
+---
+
+Renders a top navigation menu with account dropdown for the landing page. 
+This component is used in the `+layout.svelte` of the `(landing)`.
+
+Includes your app name on the left, navigation items in the middle, and theme switcher and sign in button on the right.
+
+<Frame caption="Navbar.svelte ">
+  <img src="/images/components/navbar.png" />
+</Frame>
+
+
+## Basic Usage
+
+Add your own logo and app name and navigation items to the `Navbar.svelte` component.
+
+To import the component, use:
+```html +layout.svelte
+<script lang="ts">
+    import Navbar from '$lib/ui/marketing/Navbar.svelte';
+</script>
+
+<Navbar />
+```

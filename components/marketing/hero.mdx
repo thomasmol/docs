@@ -1,0 +1,27 @@
+---
+title: "Hero"
+description: "Hero.svelte is a marketing component that shows a hero section with an image."
+icon: ""
+---
+
+Shows a hero section with an image on the right, moves below the copy on mobile.
+
+Includes the `Rating` component.
+
+<Frame caption="Hero.svelte ">
+  <img src="/images/components/hero.png" className="bg-white" />
+</Frame> 
+
+
+## Basic Usage
+
+Add your own copy and images to the `Hero.svelte` component.
+
+To import the component, use:
+```html +page.svelte
+<script lang="ts">
+    import Hero from '$lib/ui/marketing/Hero.svelte';
+</script>
+
+<Hero />
+```

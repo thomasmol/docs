@@ -1,0 +1,26 @@
+---
+title: "SidebarNav"
+description: "SidebarNav.svelte is a component that renders a sidebar navigation menu."
+icon: "sidebar"
+---
+
+Renders a sidebar navigation menu for the app environment. 
+This component is used in the `+layout.svelte` of the `(app)` and is hidden on mobile.
+
+<Frame caption="Sidebar.svelte (component on the left)">
+  <img src="/images/components/sidebar.png" />
+</Frame>
+
+
+## Basic Usage
+
+Add your own logo and navigation items to the `SidebarNav.svelte` component.
+
+To import the component, use:
+```html +layout.svelte
+<script lang="ts">
+    import SidebarNav from '$lib/ui/app/SidebarNav.svelte';
+</script>
+
+<SidebarNav/>
+```

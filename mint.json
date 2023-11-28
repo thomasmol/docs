@@ -36,19 +36,20 @@
   },
   "anchors": [
     {
-      "name": "Auth.js Repo",
+      "name": "Auth.js Repository",
       "icon": "github",
       "url": "https://github.com/thomasmolorg/launchleopard-authjs"
     },
     {
-      "name": "Supabase Repo",
+      "name": "Supabase Repository",
       "icon": "github",
       "url": "https://github.com/thomasmolorg/launchleopard-supabase"
-    },
+    }
+  ],
+  "tabs": [
     {
-      "name": "Get Launch Leopard",
-      "icon": "rocket-launch",
-      "url": "https://launchleopard.com/checkout"
+      "name": "UI Components",
+      "url": "components"
     }
   ],
   "navigation": [
@@ -75,6 +76,7 @@
         "features/payments",
         "features/openai",
         "features/styling",
+        "features/components",
         "features/analytics",
         "features/support",
         "features/seo",
@@ -87,9 +89,32 @@
         "components/dropdown",
         "components/modal",
         "components/themecontroller",
-        "components/marketing",
-        "components/app",
         "components/icons"
+      ]
+    },
+    {
+      "group": "App Components",
+      "pages": [
+        "components/app/sidebarnav",
+        "components/app/navbar",
+        "components/app/bottomnavbar"
+      ]
+    },
+    {
+      "group": "Marketing Components",
+      "pages":[
+        "components/marketing/navbar",
+        "components/marketing/hero-simple",
+        "components/marketing/hero-screenshot",
+        "components/marketing/hero",
+        "components/marketing/features",
+        "components/marketing/logocloud",
+        "components/marketing/newslettersignup",
+        "components/marketing/pricing",
+        "components/marketing/testimonials",
+        "components/marketing/faq",
+        "components/marketing/rating",
+        "components/marketing/footer"
       ]
     }
   ],

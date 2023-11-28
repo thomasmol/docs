@@ -1,0 +1,26 @@
+---
+title: "BottomNavbar"
+description: "BottomNavbar.svelte is a component that renders a bottom navigation bar menu."
+icon: "mobile"
+---
+
+Renders a bottom navigation menu for the app environment. 
+This component is used in the `+layout.svelte` of the `(app)` and is hidden on desktop.
+
+<Frame caption="BottomNavbar.svelte ">
+  <img src="/images/components/bottomnavbar.png" />
+</Frame>
+
+
+## Basic Usage
+
+Add your own logo and navigation items to the `BottomNavbar.svelte` component.
+
+To import the component, use:
+```html +layout.svelte
+<script lang="ts">
+    import BottomNavbar from '$lib/ui/app/BottomNavbar.svelte';
+</script>
+
+<BottomNavbar/>
+```
