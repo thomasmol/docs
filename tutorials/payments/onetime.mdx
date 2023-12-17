@@ -1,0 +1,96 @@
+---
+title: "One time payment"
+description: "Setup and handle one-time payments with Stripe"
+icon: "money-bill-1"
+iconType: "solid"
+---
+
+## Setting up a product in Stripe
+
+To create a one time payment, you need to create a product and a price object in Stripe.
+
+You can create a product and price in the Stripe dashboard, or using the Stripe API.
+
+
+## Creating a checkout session
+
+Once you have a product and price, you can create a checkout session. 
+A checkout session represents your customer's payment session. 
+
+This is where you can set the price object, tax, customer, and more.
+
+By default, the boilerplate uses the new embedded UI mode. This means that the checkout will be displayed in an iframe on your site, instead of redirecting the customer to Stripe.
+
+Please see the [Stripe checkout docs](https://stripe.com/docs/checkout/embedded/quickstart) for more information about the embedded UI mode.
+```typescript (app)/account/checkout/+page.server.ts
+export const load = async ({ locals }) => {
+    // Get customer details
+    ...
+
+	const checkoutSesion = await stripe.checkout.sessions.create({
+        // Use new embedded UI mode
+		ui_mode: 'embedded',
+
+        // Add your price object(s)
+		line_items: [
+			{
+				price: 'price_YOURPRICEID', // Replace with the ID of your price object
+				quantity: 1
+			}
+		],
+		mode: 'payment',
+		return_url: `${ORIGIN}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+
+        // Adjust these settings below to your needs
+		automatic_tax: { enabled: true },
+        allow_promotion_codes: true,
+        invoice_creation: { enabled: true },
+        tax_id_collection: { enabled: true },
+        automatic_tax: { enabled: true },
+
+        // Add customer id if exists, otherwise prefill email (and auto create customer)
+        ...(customerId ? { customer: customerId } : {}),
+        ...(customerEmail && !customerId ? { customer_email: customerEmail } : {})
+	});
+
+    // Return the client secret to the client
+    return { clientSecret: checkoutSesion.client_secret };
+};
+```
+
+<Tip>
+    Add your price obejct id as a variable in your <code>.env</code> file, and use it in your code. This way you can easily change the price object id and test with different prices and environments.
+</Tip>
+
+View the pages and load functions in `(app)/account/checkout/` and `(app)/account/return/` for an example of how to the checkout on the client and handle the return.
+
+## Giving access to the customer
+
+After the customer completes the payment, Stripe sends a `checkout.session.completed` event to your webhook endpoint. You can use this event to fulfill the customer's order.
+
+Make sure your webhooks are setup correctly in Stripe, and that you have added your webhook secret to your `.env` file. By default, the boilerplate will listen for webhooks on the `api/webhooks/stripe` endpoint.
+
+How you handle the webhook is up to you and depends on your product and business model. 
+A simple method can be to add a column `hasAccess` to the `users` or `profiles` table, and set it to `true` when the webhook is received.
+Then you can check if the user has access to your product, or certain pages within the app, by checking the `hasAccess` column.
+
+Make sure you add this column to the user or profile table in your database.
+
+```typescript api/webhooks/stripe/+server.ts (example)
+// ...
+case 'checkout.session.completed': {
+    const checkoutSession = event.data.object;
+    // Example with Drizzle ORM, update the user's hasAccess column based on the customer email or stripe customer id
+    await db
+        .update(users)
+        .set({ hasAccess: true })
+        .where(
+            or(
+                eq(users.email, checkoutSession.customer_email ?? ''),
+                eq(users.stripeCustomerId, checkoutSession.customer?.toString() ?? '')
+            )
+        );
+    break;
+}
+// ...
+```

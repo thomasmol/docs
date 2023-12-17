@@ -46,41 +46,31 @@ The standard database schema comes with a `stripeCustomerId` field on the `User`
 
 Webhooks are used to receive events from Stripe, like when a payment is made or a subscription is cancelled.
 Some commonly used events are added in the `src/routes/api/webhooks/stripe/+server.ts` file.
-Also, the user is automatically updated with the `stripeCustomerId` when a customer is created.
 
 ```ts src/routes/api/webhooks/stripe/+server.ts
 switch (event.type) {
     case 'checkout.session.completed': { // handle new payment (one-time or subscription)
         const checkoutSession = event.data.object;
-        console.log(checkoutSession);
         break;
     }
     case 'checkout.session.expired': { // handle expired payment
         const checkoutSession = event.data.object;
-        console.log(checkoutSession);
         break;
     }
     case 'customer.created': { // handle new customer
         const customer = event.data.object;
-        await db
-            .update(users)
-            .set({ stripeCustomerId: customer.id })
-            .where(eq(users.email, customer.email ?? ''));
         break;
     }
     case 'customer.source.expiring': { // handle expiring card, notify user
         const customerCardOrSource = event.data.object;
-        console.log(customerCardOrSource);
         break;
     }
     case 'customer.subscription.deleted': { // handle cancelled subscription, revoke access, send winback email
         const subscription = event.data.object;
-        console.log(subscription);
         break;
     }
     case 'customer.subscription.updated': { // handle subscription changes, revoke access, notify user
         const subscription = event.data.object;
-        console.log(subscription);
         break;
     }
 ```

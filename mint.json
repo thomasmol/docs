@@ -64,7 +64,18 @@
     },
     {
       "group": "Tutorials",
-      "pages": ["tutorials/authjs", "tutorials/supabase"]
+      "pages": [
+        "tutorials/authjs",
+        "tutorials/supabase",
+        {
+          "group": "Handling Payments",
+          "icon": "credit-card",
+          "pages": [
+            "tutorials/payments/onetime",
+            "tutorials/payments/subscription"
+          ]
+        }
+      ]
     },
     {
       "group": "Features",
@@ -102,7 +113,7 @@
     },
     {
       "group": "Marketing Components",
-      "pages":[
+      "pages": [
         "components/marketing/navbar",
         "components/marketing/hero-simple",
         "components/marketing/hero-screenshot",
