@@ -1,35 +1,19 @@
 ---
-title: "Icons"
+title: "Icons (Updated)"
 description: "How to use icons"
 icon: "icons"
 ---
 
-By default a few icons are included, located in `src/lib/ui/icons/`. 
+By default icons by Lucide are used: https://lucide.dev/, using the `lucide-svelte` package.
 
-The icons: 
-- ArrowTopRightOnSquare (used to indicate an external link)
-- Bars3 (used to indicate a menu)
-- Check (used to indicate a success)
-- ChevronDown (used to indicate a dropdown)
-- ChevronUp (used to indicate a dropdown)
-- Home (used to indicate a home link)
-
-They are taken from [Heroicons](https://heroicons.com/) and are free to use. 
-Other sources for icons:
-- [Lucide Icons](https://lucide.dev/icons/)
-- [Feather Icons](https://feathericons.com/)
-
-You can add new icons in the `src/lib/ui/icons/` folder. 
-
-Just copy the svg code and paste in a new `[icon_name].svelte` file.
 
 ## Usage
 
 ```html +page.svelte
 <script lang="ts">
-    import Check from '$lib/ui/icons/Check.svelte';
+    import { Check } from 'lucide-svelte';
 </script>
 
-<Check/>
+<Check size="1em"/>
 ```
 

@@ -1,0 +1,27 @@
+---
+title: "Menu Item (New)"
+description: "MenuItem.svelte is a component that renders a menu item."
+icon: "list"
+---
+
+Renders a menu item for a menu. 
+This component is used in the `SidebarNav.svelte` of the `(app)`.
+
+All props are optional, but have default values if none given.
+
+## Basic Usage
+
+To use the component:
+```html +layout.svelte
+<script lang="ts">
+    import MenuCategory from '$lib/ui/app/MenuCategory.svelte';
+    import MenuItem from '$lib/ui/app/MenuCategory.svelte';
+    import { Home, Bot } from 'lucide-svelte';
+</script>
+
+<ul class="menu">
+  <MenuCategory label="A label" icon={Home}>
+    <MenuItem href="link" label="Label" icon={Bot} activeOnSubPaths={true} />
+  </MenuCategory>
+</ul>
+```

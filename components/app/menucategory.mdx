@@ -1,0 +1,26 @@
+---
+title: "Menu Category (New)"
+description: "MenuCategory.svelte is a component that renders a menu category."
+icon: "list-tree"
+---
+
+Renders a menu category components for a menu . 
+This component is used in the `SidebarNav.svelte` of the `(app)`.
+
+All props are optional, but have default values if none given.
+
+## Basic Usage
+
+To use the component:
+```html +layout.svelte
+<script lang="ts">
+    import MenuCategory from '$lib/ui/app/MenuCategory.svelte';
+    import { Home } from 'lucide-svelte';
+</script>
+
+<ul class="menu">
+  <MenuCategory label="A label" icon={Home}>
+    <!-- Menu Items -->
+  </MenuCategory>
+</ul>
+```

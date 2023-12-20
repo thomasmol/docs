@@ -36,28 +36,4 @@ The `clickOutside.ts` script is used to dismiss the dropdown when clicked outsid
 
 Located at `src/lib/ui/components/Dropdown.svelte`.
 
-This is what the dropdown component looks like.
-
 You can customize it to your needs.
-
-```html Dropdown.svelte
-<script lang="ts">
-	import clickOutside from '$lib/clickOutside';
-
-	let dropdown: HTMLDetailsElement;
-</script>
-
-<details class="dropdown {$$props.class}" bind:this={dropdown}>
-	<summary
-		class="btn flex items-center gap-2"
-		aria-details="dropdown"
-		use:clickOutside={() => {
-			dropdown.open = false;
-		}}>
-		<slot name="button" />
-	</summary>
-	<div class="menu dropdown-content rounded-box w-52 bg-base-100 p-0 shadow">
-		<slot name="content" />
-	</div>
-</details>
-```

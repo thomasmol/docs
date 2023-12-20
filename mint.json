@@ -108,7 +108,9 @@
       "pages": [
         "components/app/sidebarnav",
         "components/app/navbar",
-        "components/app/bottomnavbar"
+        "components/app/bottomnavbar",
+        "components/app/menucategory",
+        "components/app/menuitem"
       ]
     },
     {
@@ -119,6 +121,7 @@
         "components/marketing/hero-screenshot",
         "components/marketing/hero",
         "components/marketing/features",
+        "components/marketing/logo",
         "components/marketing/logocloud",
         "components/marketing/newslettersignup",
         "components/marketing/pricing",

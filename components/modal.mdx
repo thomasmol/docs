@@ -32,29 +32,4 @@ The component is made using the DaisyUI modal component: [https://daisyui.com/co
 
 Located at `src/lib/ui/components/Modal.svelte`.
 
-This is what the modal component looks like.
-
 You can customize it to your needs.
-
-```html Modal.svelte
-<script lang="ts">
-	export let dialog: HTMLDialogElement;
-</script>
-
-<dialog id="modal" class="modal w-full" bind:this={dialog}>
-	<div class="modal-box w-11/12 max-w-5xl">
-		<form method="dialog">
-			<button
-				type="submit"
-				class="focus-visbile:ring-0 btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
-				>✕</button>
-		</form>
-		<div>
-			<slot />
-		</div>
-	</div>
-	<form method="dialog" class="modal-backdrop">
-		<button>close</button>
-	</form>
-</dialog>
-```
