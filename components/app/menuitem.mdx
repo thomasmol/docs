@@ -9,6 +9,11 @@ This component is used in the `SidebarNav.svelte` of the `(app)`.
 
 All props are optional, but have default values if none given.
 
+Will add the `.active` class to the `a` element if the current path matches the `href` prop.
+If the `activeOnSubPaths` prop is set to `true`, the `.active` class will also be added if the current path is a subpath of the `href` prop.
+
+See `app.css` on how to add a custom style the `.active` class (only for menu items).
+
 ## Basic Usage
 
 To use the component:
