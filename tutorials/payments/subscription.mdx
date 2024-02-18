@@ -110,3 +110,51 @@ case 'checkout.session.completed': {
 }
 // ...
 ```
+
+## Other webhooks
+
+You can also listen for other events, such as `invoice.created` and `invoice.paid` to handle the customer's subscription.
+
+For example, you can listen for the `invoice.paid` event to update the user's `plan` column to `pro` when the invoice is paid.
+
+```typescript api/webhooks/stripe/+server.ts (example)
+// ...
+case 'invoice.paid': {
+    const invoice = event.data.object;
+    // Example with Drizzle ORM, update the user's hasAccess column based on the customer email or stripe customer id
+    await db
+        .update(users)
+        .set({ plan: 'pro' })
+        .where(
+            or(
+                eq(users.email, invoice.customer_email ?? ''),
+                eq(users.stripeCustomerId, invoice.customer?.toString() ?? '')
+            )
+        );
+    break;
+}
+// ...
+```
+
+## Handling cancellations
+
+You can also listen for the `customer.subscription.deleted` event to handle when a customer cancels their subscription.
+
+```typescript api/webhooks/stripe/+server.ts (example)
+// ...
+case 'customer.subscription.deleted': {
+    const subscription = event.data.object;
+    // Example with Drizzle ORM, update the user's hasAccess column based on the customer email or stripe customer id
+    await db
+        .update(users)
+        .set({ plan: '' })
+        .where(
+            or(
+                eq(users.email, subscription.customer_email ?? ''),
+                eq(users.stripeCustomerId, subscription.customer?.toString() ?? '')
+            )
+        );
+    break;
+}
+// ...
+```
