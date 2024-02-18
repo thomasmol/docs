@@ -113,6 +113,8 @@ case 'checkout.session.completed': {
 
 ## Other webhooks
 
+Read [Stripe webhooks](https://stripe.com/docs/webhooks) to see all the events you can listen for and how this can be used to handle subscriptions.
+
 You can also listen for other events, such as `invoice.created` and `invoice.paid` to handle the customer's subscription.
 
 For example, you can listen for the `invoice.paid` event to update the user's `plan` column to `pro` when the invoice is paid.
