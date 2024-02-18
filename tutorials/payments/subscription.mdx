@@ -5,4 +5,108 @@ icon: "file-invoice"
 iconType: "solid"
 ---
 
-To be done!
+## Setting up a product for subscriptions in Stripe
+
+To create a subscription for a user, you need to create a product and a price object in Stripe. Make sure the price object is set to `Recurring`.
+
+Also make sure to create separate products for each plan you want to offer. For example, if you want to offer a `Basic` and `Pro` plan, you should create two products in Stripe, one for each plan.
+
+You can create a product and price in the Stripe dashboard, or using the Stripe API.
+
+<Warning>
+Please also follow the docs on [Stripe](https://docs.stripe.com/billing/subscriptions/build-subscriptions) for more information on how to set up a subscription.
+</Warning>
+
+## Creating a checkout session
+
+Once you have a product and price, you can create a checkout session. 
+A checkout session represents your customer's payment session. 
+
+This is where you can set the price object, tax, customer, and more.
+
+By default, the boilerplate uses the new embedded UI mode. This means that the checkout will be displayed in an iframe on your site, instead of redirecting the customer to Stripe.
+
+Please see the [Stripe checkout docs](https://stripe.com/docs/checkout/embedded/quickstart) for more information about the embedded UI mode.
+```typescript (app)/account/checkout/+page.server.ts
+export const load = async ({ locals }) => {
+    // Get customer details
+    ...
+
+	const checkoutSesion = await stripe.checkout.sessions.create({
+        // Use new embedded UI mode
+		ui_mode: 'embedded',
+
+        // Add your price object(s)
+		line_items: [
+			{
+				price: 'price_YOURPRICEID', // Replace with the ID of your price object
+				quantity: 1
+			}
+		],
+		mode: 'payment',
+		return_url: `${ORIGIN}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+
+        // Adjust these settings below to your needs
+		automatic_tax: { enabled: true },
+        allow_promotion_codes: true,
+        invoice_creation: { enabled: true },
+        tax_id_collection: { enabled: true },
+        automatic_tax: { enabled: true },
+
+        // Add customer id if exists, otherwise prefill email (and auto create customer)
+        ...(customerId ? { customer: customerId } : {}),
+        ...(customerEmail && !customerId ? { customer_email: customerEmail } : {})
+	});
+
+    // Return the client secret to the client
+    return { clientSecret: checkoutSesion.client_secret };
+};
+```
+
+<Tip>
+    Add your price obejct id as a variable in your <code>.env</code> file, and use it in your code. This way you can easily change the price object id and test with different prices and environments.
+</Tip>
+
+View the pages and load functions in `(app)/account/checkout/` and `(app)/account/return/` for an example of how to the checkout on the client and handle the return.
+
+## Giving access to the customer
+
+After the customer completes the payment, Stripe sends a `checkout.session.completed` and a `invoice.created` event to your webhook endpoint. You can use this event to fulfill the customer's order.
+
+Make sure your webhooks are setup correctly in Stripe, and that you have added your webhook secret to your `.env` file. By default, the boilerplate will listen for webhooks on the `api/webhooks/stripe` endpoint.
+
+
+<Warning>
+How you handle giving access to a customer is up to you and very much depends on your product and business model.
+</Warning>
+
+
+A simple method can be to add a column `plan` to the `users` or `profiles` table, and set it to `pro` or `basic` based on the subscription details when the webhook is received.
+
+Then you can check if the user has access to your product, or certain pages within the app, by checking the `plan` column.
+
+E.g. if the `plan` column is set to `pro`, the user has access to the pro features. And if its empty the user has no access.
+
+You can, for example, check for these values in `hooks.server.ts` and redirect users to the correct page based on their plan in the Authorization function.
+
+
+Make sure you add this column to the user or profile table in your database.
+
+```typescript api/webhooks/stripe/+server.ts (example)
+// ...
+case 'checkout.session.completed': {
+    const checkoutSession = event.data.object;
+    // Example with Drizzle ORM, update the user's hasAccess column based on the customer email or stripe customer id
+    await db
+        .update(users)
+        .set({ plan: 'pro' })
+        .where(
+            or(
+                eq(users.email, checkoutSession.customer_email ?? ''),
+                eq(users.stripeCustomerId, checkoutSession.customer?.toString() ?? '')
+            )
+        );
+    break;
+}
+// ...
+```
